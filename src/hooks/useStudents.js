@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {createStudent,getStudents} from '../services/students';
+import {createStudent,getAllStudents} from '../api/studentService';
 
 export const useStudents = () => {
     const [students, setStudents] = useState([]);
@@ -9,7 +9,7 @@ export const useStudents = () => {
     const fetchStudents = async () => {
         try {
             setLoading(true);
-            const data = await getStudents();
+            const data = await getAllStudents();
             setStudents(data);
         }finally {
             setLoading(false);

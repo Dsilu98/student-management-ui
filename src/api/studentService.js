@@ -1,7 +1,7 @@
 import axiosClient from "./axiosClient";
 import {API_ENDPOINTS} from "../constants/apiConstants";
 
-export const createstudent = async (studentData) => {
+export const createStudent = async (studentData) => {
     const response = await axiosClient.post(
         API_ENDPOINTS.STUDENTS,
         studentData
