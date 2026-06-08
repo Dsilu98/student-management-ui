@@ -11,13 +11,20 @@ import {
 import { useStudents } from "../hooks/useStudents";
 
 const StudentRegistration = () => {
-  const { saveStudent } = useStudents();
+  const [errors, setErrors] = useState({});
+  const { saveStudent, error } = useStudents();
   const [formData, setFormData] = useState({
     name: "",
     age: "",
   });
 
   const handleChange = (e) => {
+
+    setErrors({
+      ...errors,
+      [e.target.name]: "",
+    });
+    
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -26,6 +33,22 @@ const StudentRegistration = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const validationErrors = {};
+    if(!formData.name.trim()){
+        validationErrors.name = "Name is required";
+    }
+
+    if(!formData.age.trim() || isNaN(formData.age)){
+        validationErrors.age = "Valid age is required";
+    }
+
+    if(Object.keys(validationErrors).length > 0){
+        setErrors(validationErrors);
+        return;
+    }
+
+    setErrors({});
     await saveStudent(formData);
     setFormData({ name: "", age: "" });
   };
@@ -39,22 +62,31 @@ const StudentRegistration = () => {
           component="form"
           onSubmit={handleSubmit}
           sx={{ mt: 2 }}
+          noValidate
         >
           <TextField
             label="Name"
             name="name"
             value={formData.name}
             onChange={handleChange}
+            required
+            error={!!errors.name}
+            helperText={errors.name}
           />
           <TextField
             label="Age"
             name="age"
+            type="number"
             value={formData.age}
             onChange={handleChange}
+            required
+            error={!!errors.age}
+            helperText={errors.age}
           />
           <Button type="submit" variant="contained">
             Register
           </Button>
+          {error && <Typography color="error">{error.message}</Typography>}
         </Stack>
       </Paper>
     </Container>

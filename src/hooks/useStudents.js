@@ -6,12 +6,17 @@ export const useStudents = () => {
     const [student, setStudent] = useState(null);
     const [loading, setLoading] = useState(false);
 
+    const [error, setError] = useState(null);
+
     const fetchStudents = async () => {
         try {
             setLoading(true);
             const data = await getAllStudents();
             setStudents(data);
-        }finally {
+        }catch (err) {
+            setError(err);
+        }
+        finally {
             setLoading(false);
         }
     };
@@ -20,6 +25,8 @@ export const useStudents = () => {
         try {
             setLoading(true);
             await createStudent(payload);
+        }catch (err) {
+            setError(err);
         }finally {
             setLoading(false);
         }
@@ -30,6 +37,7 @@ export const useStudents = () => {
         student,
         loading,
         fetchStudents,
-        saveStudent
+        saveStudent,
+        error
     };
 }

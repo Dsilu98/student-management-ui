@@ -3,7 +3,7 @@ import { TableBody,Container,Typography,Table,TableHead,TableRow,TableCell, Butt
 import { useStudents } from '../hooks/useStudents';
 
 const StudentList = () => {
-    const { students, fetchStudents, loading } = useStudents();
+    const { students, fetchStudents, loading, error } = useStudents();
     const [formData, setFormData] = useState({
         name: "",
         id:""
@@ -49,6 +49,7 @@ const StudentList = () => {
             <Button variant="contained" onClick={handleSubmit} disabled={loading}>
                 {loading ? "Loading..." : "Fetch Students"}
             </Button>
+            {error && <Typography color="error">{error.message}</Typography>}
         </Container>
     );
 };
