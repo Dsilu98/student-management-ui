@@ -6,13 +6,15 @@ import {
   Button,
   Stack,
   Paper,
+  FormControl,
 } from "@mui/material";
 
 import { useStudents } from "../hooks/useStudents";
 
 const StudentRegistration = () => {
   const [errors, setErrors] = useState({});
-  const { saveStudent, error } = useStudents();
+  const [successMessage, setSuccessMessage] = useState({});
+  const { saveStudent,student,error } = useStudents();
   const [formData, setFormData] = useState({
     name: "",
     age: "",
@@ -34,6 +36,8 @@ const StudentRegistration = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setSuccessMessage({});
+    
     const validationErrors = {};
     if(!formData.name.trim()){
         validationErrors.name = "Name is required";
@@ -49,20 +53,21 @@ const StudentRegistration = () => {
     }
 
     setErrors({});
-    await saveStudent(formData);
+    const student = await saveStudent(formData);
     setFormData({ name: "", age: "" });
+    setSuccessMessage({ message: "Student registered successfully with id : " + student.id });
   };
 
   return (
     <Container sx={{ mt: 4 }}>
       <Paper sx={{ p: 3 }}>
         <Typography variant="h4">Student Registration</Typography>
-        <Stack
-          spacing={2}
-          component="form"
-          onSubmit={handleSubmit}
-          sx={{ mt: 2 }}
-          noValidate
+        <FormControl
+        sx={{
+          gap:2,
+          mt: 2,
+          // display:"flex"
+        }} 
         >
           <TextField
             label="Name"
@@ -83,11 +88,12 @@ const StudentRegistration = () => {
             error={!!errors.age}
             helperText={errors.age}
           />
-          <Button type="submit" variant="contained">
+          <Button type="submit" variant="contained" onClick={handleSubmit}>
             Register
           </Button>
+          {successMessage && <Typography color="primary">{successMessage.message}</Typography>}
           {error && <Typography color="error">{error.message}</Typography>}
-        </Stack>
+        </FormControl>
       </Paper>
     </Container>
   );

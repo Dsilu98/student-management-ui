@@ -49,7 +49,7 @@ const StudentList = () => {
             <Button variant="contained" onClick={handleSubmit} disabled={loading}>
                 {loading ? "Loading..." : "Fetch Students"}
             </Button>
-            {error && <Typography color="error">{error.message}</Typography>}
+            {error && <Typography color="error">{'Fail to fetch student details, please try again later!!'}</Typography>}
         </Container>
     );
 };

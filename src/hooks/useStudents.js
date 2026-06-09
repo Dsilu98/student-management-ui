@@ -11,6 +11,7 @@ export const useStudents = () => {
     const fetchStudents = async () => {
         try {
             setLoading(true);
+            setError(null);
             const data = await getAllStudents();
             setStudents(data);
         }catch (err) {
@@ -24,7 +25,10 @@ export const useStudents = () => {
     const saveStudent = async (payload) => {
         try {
             setLoading(true);
-            await createStudent(payload);
+            setError(null);
+            const data = await createStudent(payload);
+            setStudent(data);
+            return data;
         }catch (err) {
             setError(err);
         }finally {
